@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>NER Smart Logistics</title>
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-icon">
+                <i class="fa-solid fa-route"></i>
+            </div>
+
+            <div>
+                <h2>NER Smart</h2>
+                <span>LOGISTICS</span>
+            </div>
+        </div>
+
+        <div class="menu-title">MAIN MENU</div>
+
+        <nav>
+
+            <a href="#dashboard" class="nav-link active">
+                <i class="fa-solid fa-chart-line"></i>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="#map" class="nav-link">
+                <i class="fa-solid fa-map-location-dot"></i>
+                <span>Live Map</span>
+            </a>
+
+            <a href="#logistics" class="nav-link">
+                <i class="fa-solid fa-truck"></i>
+                <span>Logistics</span>
+            </a>
+
+            <a href="#accessibility" class="nav-link">
+                <i class="fa-solid fa-location-dot"></i>
+                <span>Accessibility</span>
+            </a>
+
+            <a href="#ai" class="nav-link">
+                <i class="fa-solid fa-robot"></i>
+                <span>AI Insights</span>
+            </a>
+
+            <a href="#alerts" class="nav-link">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <span>Alerts</span>
+            </a>
+
+            <a href="#analytics" class="nav-link">
+                <i class="fa-solid fa-chart-column"></i>
+                <span>Analytics</span>
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <a href="#" class="nav-link">
+                <i class="fa-solid fa-gear"></i>
+                <span>Settings</span>
+            </a>
+
+            <div class="system-status">
+                <span class="status-dot"></span>
+
+                <div>
+                    <strong>System Ready</strong>
+                    <small>Waiting for backend</small>
+                </div>
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="main">
+
+        <!-- HEADER -->
+
+        <header class="topbar">
+
+            <div>
+                <div class="breadcrumb">
+                    Operations / Dashboard
+                </div>
+
+                <h1>Logistics Command Center</h1>
+
+                <p>
+                    Real-time monitoring and decision support for North Eastern Region
+                </p>
+            </div>
+
+            <div class="header-actions">
+
+                <button class="icon-btn" title="Notifications">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="notification-dot"></span>
+                </button>
+
+                <div class="profile">
+                    <div class="profile-avatar">
+                        A
+                    </div>
+
+                    <div class="profile-info">
+                        <strong>Administrator</strong>
+                        <span>Operations</span>
+                    </div>
+
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- ================= DASHBOARD ================= -->
+
+        <section id="dashboard">
+
+            <!-- KPI CARDS -->
+
+            <div class="kpi-grid">
+
+                <div class="kpi-card">
+
+                    <div class="kpi-top">
+                        <div class="kpi-icon blue">
+                            <i class="fa-solid fa-route"></i>
+                        </div>
+
+                        <span class="data-status">
+                            API
+                        </span>
+                    </div>
+
+                    <span class="kpi-label">TOTAL ROUTES</span>
+
+                    <h2 id="totalRoutes">--</h2>
+
+                    <p>
+                        <i class="fa-solid fa-circle"></i>
+                        Active routes
+                    </p>
+
+                </div>
+
+
+                <div class="kpi-card">
+
+                    <div class="kpi-top">
+                        <div class="kpi-icon green">
+                            <i class="fa-solid fa-truck"></i>
+                        </div>
+
+                        <span class="data-status">
+                            API
+                        </span>
+                    </div>
+
+                    <span class="kpi-label">ACTIVE VEHICLES</span>
+
+                    <h2 id="activeVehicles">--</h2>
+
+                    <p>
+                        <i class="fa-solid fa-circle"></i>
+                        Currently moving
+                    </p>
+
+                </div>
+
+
+                <div class="kpi-card">
+
+                    <div class="kpi-top">
+                        <div class="kpi-icon red">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </div>
+
+                        <span class="data-status">
+                            API
+                        </span>
+                    </div>
+
+                    <span class="kpi-label">RISK ALERTS</span>
+
+                    <h2 id="riskAlerts">--</h2>
+
+                    <p>
+                        <i class="fa-solid fa-circle"></i>
+                        Needs attention
+                    </p>
+
+                </div>
+
+
+                <div class="kpi-card">
+
+                    <div class="kpi-top">
+                        <div class="kpi-icon purple">
+                            <i class="fa-solid fa-location-dot"></i>
+                        </div>
+
+                        <span class="data-status">
+                            API
+                        </span>
+                    </div>
+
+                    <span class="kpi-label">ACCESSIBILITY</span>
+
+                    <h2 id="accessibility">--%</h2>
+
+                    <p>
+                        <i class="fa-solid fa-circle"></i>
+                        Regional score
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- MAP + AI -->
+
+            <div class="main-grid">
+
+                <!-- MAP -->
+
+                <section class="card map-card" id="map">
+
+                    <div class="card-header">
+
+                        <div class="title-area">
+
+                            <div class="section-icon">
+                                <i class="fa-solid fa-map"></i>
+                            </div>
+
+                            <div>
+                                <h2>NER Transport Network</h2>
+                                <p>Live infrastructure and route monitoring</p>
+                            </div>
+
+                        </div>
+
+                        <span class="live-badge">
+                            <span></span>
+                            LIVE
+                        </span>
+
+                    </div>
+
+
+                    <div class="map-container" id="mapContainer">
+
+                        <div class="map-placeholder">
+
+                            <div class="map-icon">
+                                <i class="fa-solid fa-map-location-dot"></i>
+                            </div>
+
+                            <h3>Interactive Map</h3>
+
+                            <p>
+                                Map integration will be connected here
+                            </p>
+
+                            <span class="module-badge">
+                                MAP MODULE
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="map-footer">
+
+                        <div class="legend">
+
+                            <span>
+                                <i class="legend-dot active"></i>
+                                Active
+                            </span>
+
+                            <span>
+                                <i class="legend-dot delayed"></i>
+                                Delayed
+                            </span>
+
+                            <span>
+                                <i class="legend-dot danger"></i>
+                                High Risk
+                            </span>
+
+                        </div>
+
+                        <span class="last-update">
+                            Last update: --
+                        </span>
+
+                    </div>
+
+                </section>
+
+
+                <!-- AI -->
+
+                <section class="card ai-card" id="ai">
+
+                    <div class="card-header">
+
+                        <div class="title-area">
+
+                            <div class="section-icon ai">
+                                <i class="fa-solid fa-robot"></i>
+                            </div>
+
+                            <div>
+                                <h2>AI Decision Engine</h2>
+                                <p>Risk prediction & recommendations</p>
+                            </div>
+
+                        </div>
+
+                        <span class="ready-badge">
+                            ● READY
+                        </span>
+
+                    </div>
+
+
+                    <div class="ai-content">
+
+                        <div class="ai-status-icon">
+                            <i class="fa-solid fa-brain"></i>
+                        </div>
+
+                        <h3>AI Intelligence</h3>
+
+                        <p>
+                            AI recommendations and risk predictions
+                            will appear here when the backend is connected.
+                        </p>
+
+                        <div class="ai-features">
+
+                            <div>
+                                <i class="fa-solid fa-shield-halved"></i>
+                                <span>Risk Prediction</span>
+                            </div>
+
+                            <div>
+                                <i class="fa-solid fa-lightbulb"></i>
+                                <span>Route Recommendations</span>
+                            </div>
+
+                            <div>
+                                <i class="fa-solid fa-cloud-rain"></i>
+                                <span>Disruption Analysis</span>
+                            </div>
+
+                        </div>
+
+                        <button class="outline-btn" id="aiAnalysisBtn">
+                            View AI Analysis
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+
+            <!-- LOWER GRID -->
+
+            <div class="lower-grid">
+
+                <!-- ACTIVE ROUTES -->
+
+                <section class="card routes-card" id="logistics">
+
+                    <div class="card-header">
+
+                        <div class="title-area">
+
+                            <div class="section-icon">
+                                <i class="fa-solid fa-truck-fast"></i>
+                            </div>
+
+                            <div>
+                                <h2>Active Routes</h2>
+                                <p>Current logistics operations</p>
+                            </div>
+
+                        </div>
+
+                        <button class="text-btn">
+                            View All
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+
+                    </div>
+
+
+                    <div class="table-container">
+
+                        <table>
+
+                            <thead>
+                                <tr>
+                                    <th>ROUTE</th>
+                                    <th>STATUS</th>
+                                    <th>RISK</th>
+                                    <th>ETA</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="routesTable">
+
+                                <tr>
+                                    <td colspan="4">
+                                        <div class="empty-state">
+                                            <i class="fa-solid fa-database"></i>
+                                            <span>Waiting for route data</span>
+                                            <small>Backend API not connected</small>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </section>
+
+
+                <!-- WHAT IF -->
+
+                <section class="card simulator-card">
+
+                    <div class="card-header">
+
+                        <div class="title-area">
+
+                            <div class="section-icon orange">
+                                <i class="fa-solid fa-flask"></i>
+                            </div>
+
+                            <div>
+                                <h2>What-if Simulator</h2>
+                                <p>Test possible disruptions</p>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="simulator">
+
+                        <label>Scenario</label>
+
+                        <select id="scenario">
+                            <option value="">Select scenario</option>
+                            <option value="flood">Flood</option>
+                            <option value="landslide">Landslide</option>
+                            <option value="road_closure">Road Closure</option>
+                            <option value="heavy_rain">Heavy Rainfall</option>
+                        </select>
+
+
+                        <label>Affected Route</label>
+
+                        <select id="affectedRoute">
+                            <option value="">Select route</option>
+                        </select>
+
+
+                        <button class="primary-btn" id="simulateBtn">
+
+                            <i class="fa-solid fa-play"></i>
+                            Run Simulation
+
+                        </button>
+
+                        <div id="simulationResult" class="simulation-result">
+
+                            <i class="fa-solid fa-circle-info"></i>
+
+                            <span>
+                                Simulation results will appear here.
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- ALERTS -->
+
+                <section class="card alerts-card" id="alerts">
+
+                    <div class="card-header">
+
+                        <div class="title-area">
+
+                            <div class="section-icon red">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                            </div>
+
+                            <div>
+                                <h2>Recent Alerts</h2>
+                                <p>Latest network events</p>
+                            </div>
+
+                        </div>
+
+                        <button class="text-btn">
+                            View All
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+
+                    </div>
+
+
+                    <div class="alert-empty">
+
+                        <div class="alert-empty-icon">
+                            <i class="fa-regular fa-bell-slash"></i>
+                        </div>
+
+                        <h3>No alerts available</h3>
+
+                        <p>
+                            Waiting for live backend data
+                        </p>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+
+            <!-- ANALYTICS -->
+
+            <section class="card analytics-card" id="analytics">
+
+                <div class="card-header">
+
+                    <div class="title-area">
+
+                        <div class="section-icon purple">
+                            <i class="fa-solid fa-chart-column"></i>
+                        </div>
+
+                        <div>
+                            <h2>Network Analytics</h2>
+                            <p>Performance and accessibility insights</p>
+                        </div>
+
+                    </div>
+
+                    <span class="data-status">
+                        API
+                    </span>
+
+                </div>
+
+
+                <div class="analytics-placeholder">
+
+                    <i class="fa-solid fa-chart-line"></i>
+
+                    <h3>Analytics Module</h3>
+
+                    <p>
+                        Historical route performance and network
+                        analytics will be displayed here.
+                    </p>
+
+                </div>
+
+            </section>
+
+
+            <!-- ACCESSIBILITY -->
+
+            <section class="card accessibility-card" id="accessibility">
+
+                <div class="card-header">
+
+                    <div class="title-area">
+
+                        <div class="section-icon purple">
+                            <i class="fa-solid fa-location-dot"></i>
+                        </div>
+
+                        <div>
+                            <h2>Regional Accessibility</h2>
+                            <p>Connectivity across the North Eastern Region</p>
+                        </div>
+
+                    </div>
+
+                    <span class="data-status">
+                        API
+                    </span>
+
+                </div>
+
+
+                <div class="accessibility-content">
+
+                    <div class="access-score">
+
+                        <span>Regional Score</span>
+
+                        <strong id="regionalScore">
+                            --%
+                        </strong>
+
+                        <div class="progress">
+                            <div id="accessProgress"></div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="district-placeholder">
+
+                        <i class="fa-solid fa-map"></i>
+
+                        <div>
+                            <strong>District-level analysis</strong>
+                            <p>
+                                District accessibility data will be
+                                loaded from the backend.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </section>
+
+
+        <!-- FOOTER -->
+
+        <footer>
+
+            <span>
+                © 2026 NER Smart Logistics
+            </span>
+
+            <span>
+                Digital Logistics Decision Support System
+            </span>
+
+        </footer>
+
+    </main>
+
+</div>
+
+
+<!-- JavaScript -->
+<script src="script.js"></script>
+
+</body>
+</html>
