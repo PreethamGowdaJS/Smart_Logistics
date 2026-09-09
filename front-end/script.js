@@ -405,6 +405,15 @@ async function loadAIInsights() {
        document.getElementById("aiRisk").textContent =
            `${data.risk_score}%`;
 
+        const riskLevel =
+           data.risk_score >= 70
+              ? "High Risk"
+              : data.risk_score >= 40
+              ? "Medium Risk"
+              : "Low Risk";
+
+       console.log("Risk Level:", riskLevel);
+       document.getElementById("aiRiskLevel").textContent = riskLevel;
        document.getElementById("aiAccessibility").textContent =
            `${data.accessibility_score}%`;
 
@@ -413,6 +422,11 @@ async function loadAIInsights() {
 
        document.getElementById("aiEta").textContent =
             `${data.eta_minutes} min`;
+
+        document.getElementById("aiRecommendation").textContent =
+           data.route_score >= 60
+              ? "Recommended Route"
+              : "Use Caution";
 
     }
 
