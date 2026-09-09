@@ -19,7 +19,7 @@
    For now keep it empty.
 */
 
-const API_BASE_URL = "";
+const API_BASE_URL = "http://127.0.0.1:8000";
 
 
 /* =====================================================
@@ -61,23 +61,39 @@ async function loadDashboardData() {
 
     try {
 
-        const data =
-            await apiRequest("/api/dashboard");
+       const routes =
+            await apiRequest("/api/database/routes");
+        
+       const vehicles =
+            await apiRequest("/api/database/vehicles");
+        
+       const disruptions =
+            await apiRequest("/api/database/disruptions");
+
+       const accessibilityData =
+            await apiRequest("/api/database/accessibility");
 
         document.getElementById("totalRoutes")
             .textContent =
-            data.totalRoutes ?? "--";
+            routes.length;
 
         document.getElementById("activeVehicles")
             .textContent =
-            data.activeVehicles ?? "--";
+            vehicles.length;
 
         document.getElementById("riskAlerts")
             .textContent =
-            data.riskAlerts ?? "--";
-
+            disruptions.length;
+       
         const accessibility =
-            data.accessibility ?? null;
+        accessibilityData.length > 0
+           ? Math.round(
+                accessibilityData.reduce(
+                   (sum, item) => sum + item.overall_accessibility_score,
+                   0
+                ) / accessibilityData.length
+            )
+            : null;
 
         document.getElementById("accessibility")
             .textContent =
@@ -122,7 +138,7 @@ async function loadRoutes() {
     try {
 
         const routes =
-            await apiRequest("/api/routes");
+           await apiRequest("/api/database/routes");
 
         displayRoutes(routes);
 
@@ -184,20 +200,19 @@ function displayRoutes(routes) {
 
             <td>
                 <strong>
-                    ${escapeHTML(route.name ?? "--")}
-                </strong>
+                    ${escapeHTML(route.route_id ?? "--")}                </strong>
             </td>
 
             <td>
-                ${escapeHTML(route.status ?? "--")}
+                ${escapeHTML(route.route_status ?? "--")}
             </td>
 
             <td>
-                ${escapeHTML(route.risk ?? "--")}
+                ${escapeHTML(route.risk_level ?? "--")}
             </td>
 
             <td>
-                ${escapeHTML(route.eta ?? "--")}
+                ${escapeHTML(route.estimated_time_min ?? "--")}min
             </td>
 
         `;
@@ -218,7 +233,7 @@ async function loadRouteOptions() {
     try {
 
         const routes =
-            await apiRequest("/api/routes");
+          await apiRequest("/api/database/routes");
 
         const select =
             document.getElementById("affectedRoute");
@@ -356,8 +371,23 @@ async function loadAIInsights() {
     try {
 
         const data =
-            await apiRequest(
-                "/api/ai/insights"
+          await apiRequest(
+             "/api/route/optimize",
+                {
+                   method: "POST",
+                   body: JSON.stringify({
+                    origin: {
+                    lat: 26.1445,
+                    lng: 91.7362
+                   },
+                   destination: {
+                    lat: 25.5788,
+                    lng: 91.8933
+                   },
+                   vehicle_type: "truck",
+                   avoid_tolls: false
+                   })
+                }
             );
 
         console.log(
@@ -372,6 +402,17 @@ async function loadAIInsights() {
            data.recommendation
            data.confidence
         */
+       document.getElementById("aiRisk").textContent =
+           `${data.risk_score}%`;
+
+       document.getElementById("aiAccessibility").textContent =
+           `${data.accessibility_score}%`;
+
+       document.getElementById("aiRouteScore").textContent =
+           `${data.route_score}/100`;
+
+       document.getElementById("aiEta").textContent =
+            `${data.eta_minutes} min`;
 
     }
 
@@ -463,7 +504,7 @@ document.addEventListener("DOMContentLoaded", function () {
     loadDashboardData();
     loadRoutes();
     loadRouteOptions();
-
+    loadAIInsights();
     initializeMap();
     loadTestRoute();
 });

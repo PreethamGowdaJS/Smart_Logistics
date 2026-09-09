@@ -6,7 +6,11 @@ from sqlalchemy.orm import Session
 from app.db.database import get_db
 from app.services.osrm_service import get_route
 from app.services.feature_service import fetch_route_features
-
+from app.services.ml_services import (
+    predict_risk,
+    predict_eta,
+    calculate_route_score
+)
 router = APIRouter()
 
 
@@ -61,13 +65,37 @@ async def optimize_route(req: RouteRequest, db: Session = Depends(get_db)):
         req.destination.lng
     )
 
-    scores = calculate_scores(features)
+    risk_score = predict_risk(features)
 
+    eta_minutes = predict_eta(
+        features,
+        route["distance_km"],
+        route["duration_minutes"]
+    )
+
+    accessibility = features.get("accessibility") or {}
+
+    road_access_score = accessibility.get("road_access_score", 50)
+    transport_access_score = accessibility.get("transport_access_score", 50)
+
+    accessibility_score = round(
+        (road_access_score + transport_access_score) / 2,
+        2
+    )
+
+    route_score = calculate_route_score(
+        risk_score,
+        accessibility_score,
+        route["distance_km"],
+        eta_minutes
+    )
+    
     return {
         "route_geojson": route["route_geojson"],
         "distance_km": route["distance_km"],
-        "eta_minutes": route["duration_minutes"],
-        "risk_score": scores["risk_score"],
-        "accessibility_score": scores["accessibility_score"],
+        "eta_minutes": eta_minutes,
+        "risk_score": risk_score,
+        "accessibility_score": accessibility_score,
+        "route_score": route_score,
         "disruptions": features["disruptions"]
     }
