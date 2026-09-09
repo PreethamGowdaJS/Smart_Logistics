@@ -457,15 +457,85 @@ function escapeHTML(value) {
    12. INITIALIZE
 ===================================================== */
 
-document.addEventListener(
-    "DOMContentLoaded",
-    function () {
+let map;
+let routeLayer;
 
-        loadDashboardData();
+document.addEventListener("DOMContentLoaded", function () {
+    loadDashboardData();
+    loadRoutes();
+    loadRouteOptions();
 
-        loadRoutes();
+    initializeMap();
+    loadTestRoute();
+});
 
-        loadRouteOptions();
+
+function initializeMap() {
+    map = L.map("mapContainer").setView([25.8, 93.5], 6);
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: "&copy; OpenStreetMap contributors"
+    }).addTo(map);
+}
+
+
+async function loadTestRoute() {
+
+    const origin = {
+        lat: 26.1445,
+        lng: 91.7362
+    };
+
+    const destination = {
+        lat: 25.5788,
+        lng: 91.8933
+    };
+
+    try {
+
+        const response = await fetch(
+            "http://127.0.0.1:8000/api/route/optimize",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    origin: origin,
+                    destination: destination,
+                    vehicle_type: "truck",
+                    avoid_tolls: false
+                })
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error("Route API failed");
+        }
+
+        const data = await response.json();
+
+        console.log("Route data:", data);
+        document.getElementById("routeDistance").textContent =
+    `${data.distance_km} km`;
+
+document.getElementById("routeEta").textContent =
+    `${data.eta_minutes} min`;
+
+        if (routeLayer) {
+            map.removeLayer(routeLayer);
+        }
+
+        routeLayer = L.geoJSON(data.route_geojson).addTo(map);
+
+        map.fitBounds(routeLayer.getBounds());
+
+        console.log("Distance:", data.distance_km, "km");
+        console.log("ETA:", data.eta_minutes, "minutes");
+
+    } catch (error) {
+
+        console.error("Route loading failed:", error);
 
     }
-);
+}
