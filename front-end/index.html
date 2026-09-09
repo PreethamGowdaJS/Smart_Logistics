@@ -15,7 +15,9 @@
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-    <link rel="stylesheet" href="style.css">
+<!-- Leaflet Map -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -302,6 +304,17 @@
                         </div>
 
                     </div>
+<div class="route-info">
+    <div class="route-info-item">
+        <span>Distance</span>
+        <strong id="routeDistance">-- km</strong>
+    </div>
+
+    <div class="route-info-item">
+        <span>Estimated Time</span>
+        <strong id="routeEta">-- min</strong>
+    </div>
+</div>
 
 
                     <div class="map-footer">
@@ -703,6 +716,10 @@
 
 </div>
 
+
+<!-- JavaScript -->
+<!-- Leaflet Map -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <!-- JavaScript -->
 <script src="script.js"></script>
