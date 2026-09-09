@@ -456,7 +456,6 @@ function escapeHTML(value) {
 /* =====================================================
    12. INITIALIZE
 ===================================================== */
-
 let map;
 let routeLayer;
 
@@ -469,15 +468,14 @@ document.addEventListener("DOMContentLoaded", function () {
     loadTestRoute();
 });
 
-
 function initializeMap() {
     map = L.map("mapContainer").setView([25.8, 93.5], 6);
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        attribution: "&copy; OpenStreetMap contributors"
+        attribution: "&copy; OpenStreetMap contributors",
+        noWrap: true
     }).addTo(map);
 }
-
 
 async function loadTestRoute() {
 
@@ -516,11 +514,12 @@ async function loadTestRoute() {
         const data = await response.json();
 
         console.log("Route data:", data);
-        document.getElementById("routeDistance").textContent =
-    `${data.distance_km} km`;
 
-document.getElementById("routeEta").textContent =
-    `${data.eta_minutes} min`;
+        document.getElementById("routeDistance").textContent =
+            `${data.distance_km} km`;
+
+        document.getElementById("routeEta").textContent =
+            `${data.eta_minutes} min`;
 
         if (routeLayer) {
             map.removeLayer(routeLayer);
@@ -539,3 +538,4 @@ document.getElementById("routeEta").textContent =
 
     }
 }
+
