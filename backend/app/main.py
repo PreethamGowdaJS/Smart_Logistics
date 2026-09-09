@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routes import route_optimize, disruptions, accessibility
+from app.routes import route_optimize, disruptions, accessibility, database
 
 app = FastAPI(title="Smart Logistics API")
 
@@ -15,6 +15,7 @@ app.add_middleware(
 app.include_router(route_optimize.router, prefix="/api/route", tags=["route"])
 app.include_router(disruptions.router, prefix="/api/disruptions", tags=["disruptions"])
 app.include_router(accessibility.router, prefix="/api/accessibility", tags=["accessibility"])
+app.include_router(database.router, prefix="/api/database", tags=["database"])
 
 @app.get("/")
 def health():
