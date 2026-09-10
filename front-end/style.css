@@ -1424,3 +1424,38 @@ footer {
     }
 
 }
+.route-selector {
+    display: flex;
+    gap: 12px;
+    align-items: flex-end;
+    padding: 16px 0;
+    flex-wrap: wrap;
+}
+
+.route-selector-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+    min-width: 160px;
+}
+
+.route-selector-field label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #6b7280;
+    text-transform: uppercase;
+}
+
+.route-selector-field select {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    font-family: inherit;
+    font-size: 14px;
+}
+
+#findRouteBtn {
+    height: 38px;
+    white-space: nowrap;
+}

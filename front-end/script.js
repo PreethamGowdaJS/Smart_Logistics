@@ -518,9 +518,13 @@ document.addEventListener("DOMContentLoaded", function () {
     loadDashboardData();
     loadRoutes();
     loadRouteOptions();
+    loadLocationOptions();
     loadAIInsights();
     initializeMap();
-    loadTestRoute();
+    loadRouteBetween(
+        { lat: 26.1445, lng: 91.7362 },
+        { lat: 25.5788, lng: 91.8933 }
+    );
 });
 
 function initializeMap() {
@@ -531,18 +535,7 @@ function initializeMap() {
         noWrap: true
     }).addTo(map);
 }
-
-async function loadTestRoute() {
-
-    const origin = {
-        lat: 26.1445,
-        lng: 91.7362
-    };
-
-    const destination = {
-        lat: 25.5788,
-        lng: 91.8933
-    };
+async function loadRouteBetween(origin, destination) {
 
     try {
 
@@ -593,4 +586,71 @@ async function loadTestRoute() {
 
     }
 }
+
+ 
+/* =====================================================
+   LOCATION SELECTOR
+===================================================== */
+
+let allLocations = [];
+
+async function loadLocationOptions() {
+    try {
+        allLocations = await apiRequest("/api/locations");
+
+        const originSelect = document.getElementById("originSelect");
+        const destinationSelect = document.getElementById("destinationSelect");
+
+        allLocations.forEach(loc => {
+            const label = `${loc.city}, ${loc.state}`;
+
+            const originOption = document.createElement("option");
+            originOption.value = loc.location_id;
+            originOption.textContent = label;
+            originSelect.appendChild(originOption);
+
+            const destOption = document.createElement("option");
+            destOption.value = loc.location_id;
+            destOption.textContent = label;
+            destinationSelect.appendChild(destOption);
+        });
+    } catch (error) {
+        console.log("Location options unavailable:", error.message);
+    }
+}
+
+function getLocationById(id) {
+    return allLocations.find(loc => loc.location_id === id);
+}
+
+async function findRouteFromSelection() {
+    const originId = document.getElementById("originSelect").value;
+    const destinationId = document.getElementById("destinationSelect").value;
+
+    if (!originId || !destinationId) {
+        alert("Please select both origin and destination.");
+        return;
+    }
+
+    if (originId === destinationId) {
+        alert("Origin and destination must be different.");
+        return;
+    }
+
+    const originLoc = getLocationById(originId);
+    const destLoc = getLocationById(destinationId);
+
+    if (!originLoc || !destLoc) {
+        console.log("Could not find selected locations.");
+        return;
+    }
+
+    await loadRouteBetween(
+        { lat: originLoc.latitude, lng: originLoc.longitude },
+        { lat: destLoc.latitude, lng: destLoc.longitude }
+    );
+}
+
+document.getElementById("findRouteBtn")
+    .addEventListener("click", findRouteFromSelection);
 
