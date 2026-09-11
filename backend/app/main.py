@@ -1,10 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routes import route_optimize, disruptions, accessibility
+from app.routes import route_optimize, disruptions, accessibility, locations, routes_list , simulation
 
 app = FastAPI(title="Smart Logistics API")
 
-# Wide open CORS for hackathon speed — frontend can hit this from anywhere
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -15,6 +14,9 @@ app.add_middleware(
 app.include_router(route_optimize.router, prefix="/api/route", tags=["route"])
 app.include_router(disruptions.router, prefix="/api/disruptions", tags=["disruptions"])
 app.include_router(accessibility.router, prefix="/api/accessibility", tags=["accessibility"])
+app.include_router(locations.router, prefix="/api/locations", tags=["locations"])
+app.include_router(routes_list.router, prefix="/api/database", tags=["database"])
+app.include_router(simulation.router, prefix="/api/simulation", tags=["simulation"])
 
 @app.get("/")
 def health():

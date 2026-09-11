@@ -19,7 +19,7 @@
    For now keep it empty.
 */
 
-const API_BASE_URL = "";
+const API_BASE_URL = "http://127.0.0.1:8000";
 
 
 /* =====================================================
@@ -61,23 +61,39 @@ async function loadDashboardData() {
 
     try {
 
-        const data =
-            await apiRequest("/api/dashboard");
+       const routes =
+            await apiRequest("/api/database/routes");
+        
+       const vehicles =
+            await apiRequest("/api/database/vehicles");
+        
+       const disruptions =
+            await apiRequest("/api/database/disruptions");
+
+       const accessibilityData =
+            await apiRequest("/api/database/accessibility");
 
         document.getElementById("totalRoutes")
             .textContent =
-            data.totalRoutes ?? "--";
+            routes.length;
 
         document.getElementById("activeVehicles")
             .textContent =
-            data.activeVehicles ?? "--";
+            vehicles.length;
 
         document.getElementById("riskAlerts")
             .textContent =
-            data.riskAlerts ?? "--";
-
+            disruptions.length;
+       
         const accessibility =
-            data.accessibility ?? null;
+        accessibilityData.length > 0
+           ? Math.round(
+                accessibilityData.reduce(
+                   (sum, item) => sum + item.overall_accessibility_score,
+                   0
+                ) / accessibilityData.length
+            )
+            : null;
 
         document.getElementById("accessibility")
             .textContent =
@@ -122,7 +138,7 @@ async function loadRoutes() {
     try {
 
         const routes =
-            await apiRequest("/api/routes");
+           await apiRequest("/api/database/routes");
 
         displayRoutes(routes);
 
@@ -184,20 +200,19 @@ function displayRoutes(routes) {
 
             <td>
                 <strong>
-                    ${escapeHTML(route.name ?? "--")}
-                </strong>
+                    ${escapeHTML(route.route_id ?? "--")}                </strong>
             </td>
 
             <td>
-                ${escapeHTML(route.status ?? "--")}
+                ${escapeHTML(route.route_status ?? "--")}
             </td>
 
             <td>
-                ${escapeHTML(route.risk ?? "--")}
+                ${escapeHTML(route.risk_level ?? "--")}
             </td>
 
             <td>
-                ${escapeHTML(route.eta ?? "--")}
+                ${escapeHTML(route.estimated_time_min ?? "--")}min
             </td>
 
         `;
@@ -218,7 +233,7 @@ async function loadRouteOptions() {
     try {
 
         const routes =
-            await apiRequest("/api/routes");
+          await apiRequest("/api/database/routes");
 
         const select =
             document.getElementById("affectedRoute");
@@ -356,8 +371,23 @@ async function loadAIInsights() {
     try {
 
         const data =
-            await apiRequest(
-                "/api/ai/insights"
+          await apiRequest(
+             "/api/route/optimize",
+                {
+                   method: "POST",
+                   body: JSON.stringify({
+                    origin: {
+                    lat: 26.1445,
+                    lng: 91.7362
+                   },
+                   destination: {
+                    lat: 25.5788,
+                    lng: 91.8933
+                   },
+                   vehicle_type: "truck",
+                   avoid_tolls: false
+                   })
+                }
             );
 
         console.log(
@@ -372,6 +402,31 @@ async function loadAIInsights() {
            data.recommendation
            data.confidence
         */
+       document.getElementById("aiRisk").textContent =
+           `${data.risk_score}%`;
+
+        const riskLevel =
+           data.risk_score >= 70
+              ? "High Risk"
+              : data.risk_score >= 40
+              ? "Medium Risk"
+              : "Low Risk";
+
+       console.log("Risk Level:", riskLevel);
+       document.getElementById("aiRiskLevel").textContent = riskLevel;
+       document.getElementById("aiAccessibility").textContent =
+           `${data.accessibility_score}%`;
+
+       document.getElementById("aiRouteScore").textContent =
+           `${data.route_score}/100`;
+
+       document.getElementById("aiEta").textContent =
+            `${data.eta_minutes} min`;
+
+        document.getElementById("aiRecommendation").textContent =
+           data.route_score >= 60
+              ? "Recommended Route"
+              : "Use Caution";
 
     }
 
@@ -463,9 +518,13 @@ document.addEventListener("DOMContentLoaded", function () {
     loadDashboardData();
     loadRoutes();
     loadRouteOptions();
-
+    loadLocationOptions();
+    loadAIInsights();
     initializeMap();
-    loadTestRoute();
+    loadRouteBetween(
+        { lat: 26.1445, lng: 91.7362 },
+        { lat: 25.5788, lng: 91.8933 }
+    );
 });
 
 function initializeMap() {
@@ -476,18 +535,7 @@ function initializeMap() {
         noWrap: true
     }).addTo(map);
 }
-
-async function loadTestRoute() {
-
-    const origin = {
-        lat: 26.1445,
-        lng: 91.7362
-    };
-
-    const destination = {
-        lat: 25.5788,
-        lng: 91.8933
-    };
+async function loadRouteBetween(origin, destination) {
 
     try {
 
@@ -514,7 +562,31 @@ async function loadTestRoute() {
         const data = await response.json();
 
         console.log("Route data:", data);
+        document.getElementById("aiRisk").textContent =
+             `${data.risk_score}%`;
 
+        const riskLevel =
+             data.risk_score >= 70
+                ? "High Risk"
+                : data.risk_score >= 40
+                ? "Medium Risk"
+               : "Low Risk";
+
+        document.getElementById("aiRiskLevel").textContent = riskLevel;
+
+        document.getElementById("aiAccessibility").textContent =
+             `${data.accessibility_score}%`;
+
+        document.getElementById("aiRouteScore").textContent =
+            `${data.route_score}/100`;
+
+       document.getElementById("aiEta").textContent =
+            `${data.eta_minutes} min`;
+
+        document.getElementById("aiRecommendation").textContent =
+            data.route_score >= 60
+               ? "Recommended Route"
+               : "Use Caution";
         document.getElementById("routeDistance").textContent =
             `${data.distance_km} km`;
 
@@ -538,4 +610,71 @@ async function loadTestRoute() {
 
     }
 }
+
+ 
+/* =====================================================
+   LOCATION SELECTOR
+===================================================== */
+
+let allLocations = [];
+
+async function loadLocationOptions() {
+    try {
+        allLocations = await apiRequest("/api/locations");
+
+        const originSelect = document.getElementById("originSelect");
+        const destinationSelect = document.getElementById("destinationSelect");
+
+        allLocations.forEach(loc => {
+            const label = `${loc.city}, ${loc.state}`;
+
+            const originOption = document.createElement("option");
+            originOption.value = loc.location_id;
+            originOption.textContent = label;
+            originSelect.appendChild(originOption);
+
+            const destOption = document.createElement("option");
+            destOption.value = loc.location_id;
+            destOption.textContent = label;
+            destinationSelect.appendChild(destOption);
+        });
+    } catch (error) {
+        console.log("Location options unavailable:", error.message);
+    }
+}
+
+function getLocationById(id) {
+    return allLocations.find(loc => loc.location_id === id);
+}
+
+async function findRouteFromSelection() {
+    const originId = document.getElementById("originSelect").value;
+    const destinationId = document.getElementById("destinationSelect").value;
+
+    if (!originId || !destinationId) {
+        alert("Please select both origin and destination.");
+        return;
+    }
+
+    if (originId === destinationId) {
+        alert("Origin and destination must be different.");
+        return;
+    }
+
+    const originLoc = getLocationById(originId);
+    const destLoc = getLocationById(destinationId);
+
+    if (!originLoc || !destLoc) {
+        console.log("Could not find selected locations.");
+        return;
+    }
+
+    await loadRouteBetween(
+        { lat: originLoc.latitude, lng: originLoc.longitude },
+        { lat: destLoc.latitude, lng: destLoc.longitude }
+    );
+}
+
+document.getElementById("findRouteBtn")
+    .addEventListener("click", findRouteFromSelection);
 

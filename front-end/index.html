@@ -281,6 +281,29 @@
                         </span>
 
                     </div>
+                    <div class="route-selector">
+
+    <div class="route-selector-field">
+        <label for="originSelect">Origin</label>
+        <select id="originSelect">
+            <option value="">Select origin</option>
+        </select>
+    </div>
+
+    <div class="route-selector-field">
+        <label for="destinationSelect">Destination</label>
+        <select id="destinationSelect">
+            <option value="">Select destination</option>
+        </select>
+    </div>
+
+    <button class="primary-btn" id="findRouteBtn">
+        <i class="fa-solid fa-magnifying-glass-location"></i>
+        Find Route
+    </button>
+
+</div>
+
 
 
                     <div class="map-container" id="mapContainer">
@@ -382,8 +405,13 @@
                         <h3>AI Intelligence</h3>
 
                         <p>
-                            AI recommendations and risk predictions
-                            will appear here when the backend is connected.
+                            Risk Score: <strong id="aiRisk">--</strong><br>
+                            <span id="aiRiskLevel">--</span><br>
+                            Accessibility Score: <strong id="aiAccessibility">--</strong><br>
+                            Route Score: <strong id="aiRouteScore">--</strong><br>
+                            Estimated Time: <strong id="aiEta">--</strong>
+                            <br>
+                            <span id="aiRecommendation">--</span>
                         </p>
 
                         <div class="ai-features">
