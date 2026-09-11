@@ -562,7 +562,31 @@ async function loadRouteBetween(origin, destination) {
         const data = await response.json();
 
         console.log("Route data:", data);
+        document.getElementById("aiRisk").textContent =
+             `${data.risk_score}%`;
 
+        const riskLevel =
+             data.risk_score >= 70
+                ? "High Risk"
+                : data.risk_score >= 40
+                ? "Medium Risk"
+               : "Low Risk";
+
+        document.getElementById("aiRiskLevel").textContent = riskLevel;
+
+        document.getElementById("aiAccessibility").textContent =
+             `${data.accessibility_score}%`;
+
+        document.getElementById("aiRouteScore").textContent =
+            `${data.route_score}/100`;
+
+       document.getElementById("aiEta").textContent =
+            `${data.eta_minutes} min`;
+
+        document.getElementById("aiRecommendation").textContent =
+            data.route_score >= 60
+               ? "Recommended Route"
+               : "Use Caution";
         document.getElementById("routeDistance").textContent =
             `${data.distance_km} km`;
 
